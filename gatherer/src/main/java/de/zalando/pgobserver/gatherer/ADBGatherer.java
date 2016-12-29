@@ -18,6 +18,8 @@ import de.zalando.pgobserver.gatherer.persistence.PgoWriterSprocServiceImpl;
 import de.zalando.sprocwrapper.dsprovider.DataSourceProvider;
 import de.zalando.sprocwrapper.dsprovider.SingleDataSourceProvider;
 
+import java.util.Properties;
+
 public abstract class ADBGatherer extends AGatherer {
     @Override
 	public String toString() {
@@ -46,7 +48,12 @@ public abstract class ADBGatherer extends AGatherer {
 // TODO: why must every gatherer has its own connection? what is the cost of create a connection in comparison to a
 // persistent connection?
         String url = "jdbc:postgresql://" + host.name + ":" + host.port + "/" + host.dbname;
-        DataSource ds = new DriverManagerDataSource(url, host.user, host.password);
+        //DataSource ds = new DriverManagerDataSource(url, host.user, host.password);
+	Properties properties = new Properties();
+	properties.setProperty("user", host.user);
+	properties.setProperty("password", host.password);
+	properties.setProperty("ssl", "true");
+        DataSource ds = new DriverManagerDataSource(url, properties);
         int minorVersion = 0;
         try {
             DatabaseMetaData meta = ds.getConnection().getMetaData();

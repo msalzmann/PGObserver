@@ -19,6 +19,8 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+import java.util.Properties;
+
 public class IndexStatsGatherer extends ADBGatherer {
 
     private static final Logger LOG = LoggerFactory.getLogger(IndexStatsGatherer.class);
@@ -39,8 +41,13 @@ public class IndexStatsGatherer extends ADBGatherer {
 
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection("jdbc:postgresql://" + host.name + ":" + host.port + "/" + host.dbname,
-                    host.user, host.password);
+	    Properties properties = new Properties();
+	    properties.setProperty("user", host.user);
+	    properties.setProperty("password", host.password);
+	    properties.setProperty("ssl", "true");
+            /*conn = DriverManager.getConnection("jdbc:postgresql://" + host.name + ":" + host.port + "/" + host.dbname,
+                    host.user, host.password);*/
+            conn = DriverManager.getConnection("jdbc:postgresql://" + host.name + ":" + host.port + "/" + host.dbname, properties);
 
             Statement st = conn.createStatement();
             st.execute("SET statement_timeout TO '15s';");

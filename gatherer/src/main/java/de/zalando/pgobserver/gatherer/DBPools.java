@@ -28,7 +28,7 @@ public class DBPools {
             final BoneCPConfig config = new BoneCPConfig();
             config.setAcquireIncrement(1);
             config.setJdbcUrl("jdbc:postgresql://" + settings.database.host + ":" + settings.database.port + "/"
-                    + settings.database.name);
+                    + settings.database.name );
             config.setUsername(settings.database.backend_user);
             config.setPassword(settings.database.backend_password);
             config.setPartitionCount(settings.pool.getPartitions());

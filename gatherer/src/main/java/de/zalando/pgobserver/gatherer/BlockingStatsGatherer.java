@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+import java.util.Properties;
 
 public class BlockingStatsGatherer extends ADBGatherer {
 
@@ -89,10 +90,16 @@ public class BlockingStatsGatherer extends ADBGatherer {
     public boolean gatherData() {
         Connection conn_host = null, conn_pgo = null;
 
-        try {
-            conn_host = DriverManager.getConnection("jdbc:postgresql://" + host.name + ":" + host.port + "/" + host.dbname,
-                    host.user, host.password);
+        try {	
+	    Properties properties = new Properties();
+	    properties.setProperty("user", host.user);
+	    properties.setProperty("password", host.password);
+	    properties.setProperty("ssl", "true");
+            /*conn_host = DriverManager.getConnection("jdbc:postgresql://" + host.name + ":" + host.port + "/" + host.dbname,
+                    host.user, host.password);*/
+            conn_host = DriverManager.getConnection("jdbc:postgresql://" + host.name + ":" + host.port + "/" + host.dbname, properties);
             conn_pgo = DBPools.getDataConnection();
+
 
             Statement st_host = conn_host.createStatement();
             st_host.execute("SET statement_timeout TO '60s';");
